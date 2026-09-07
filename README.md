@@ -13,9 +13,9 @@ This portfolio website is built using the following technologies:
 
 ## 🚀 Features
 
-- **About Me**: Overview of my background in game development, 3D visualization, and digital art.
-- **Projects Showcase**: Interactive list of professional and personal projects (including *Rasta Santa*, *Grow Farm Garden*, *Captain EcoGen*, *Finger Gunner*, *Dribble Run*, and *Unity Image Recognition*).
-- **Experience Timeline**: Career milestones at Deluxe Creation Studios, GDM Group, Qlipit.io, and freelance work.
+- **About Me**: Overview of my background in game development and 3D visualization.
+- **Projects Showcase**: Interactive list of professional and personal projects (including *Rasta Santa*, *Grow Farm Garden*, e.t.c).
+- **Experience Timeline**: Career milestones at Deluxe Creation Studios, GDM Group.
 - **Responsive Layout**: Designed for seamless viewing across mobile, tablet, and desktop devices with custom glassmorphism and modern UI elements.
 
 ## 🛠️ Built With
@@ -25,23 +25,10 @@ This portfolio website is built using the following technologies:
 - **Framer Motion** (for smooth animations and modal transitions)
 - **Lucide Icons** / **React Icons**
 
-## Projects
-
-This portfolio features my work at Deluxe Creation Studios, including:
-
-- **Rasta Santa: Action Platformer** - 2D action shooter set in Lagos
-- **Grow Farm Garden: Cozy Farming** - 3D farming simulator
-- **Captain EcoGen: Save the Planet** - Educational city-builder
-- **Finger Gunner: AI Robot FPS** - Gesture-based mobile FPS
-- **Dribble Run: Football Skills** - Swipe-based football runner
-
 ## Contact
 
 - Email: [dnnadi2000@gmail.com](mailto:dnnadi2000@gmail.com)
 - LinkedIn: [Nnadi Daniel](https://www.linkedin.com/in/daniel-nnadi-760462215)
-- Twitter/X: [@DanielZeus2099](https://x.com/DanielZeus2099)
-- Instagram: [@daniel_zeus1](https://www.instagram.com/daniel_zeus1)
-- TikTok: [@daniel_zeus2099](https://www.tiktok.com/@daniel_zeus2099)
 
 ## 🙏 Acknowledgments
 
