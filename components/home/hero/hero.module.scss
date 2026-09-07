@@ -1,0 +1,59 @@
+.hero {
+  margin-bottom: 9.6rem;
+
+  @media (max-width: 768px) {
+    margin-bottom: 4.8rem;
+  }
+}
+
+.copyWrapper {
+  position: relative;
+  z-index: 10;
+
+  width: fit-content;
+  margin: 4.8rem 0;
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: default;
+
+  h1, h2, p, span {
+    user-select: text;
+    -webkit-user-select: text;
+    cursor: text;
+  }
+}
+
+.title {
+  font-size: var(--text-2xl);
+  font-weight: 900;
+  line-height: 1.2;
+  padding-bottom: 0.4rem;
+
+  span {
+    color: var(--brand);
+  }
+
+  @media (max-width: 768px) {
+    font-size: var(--text-xl);
+  }
+}
+
+.subTitle {
+  font-size: var(--text-lg);
+  line-height: 1.35;
+  margin-top: 1.6rem;
+  padding-bottom: 0.8rem;
+  font-weight: 200;
+
+  span {
+    font-weight: bold;
+    color: var(--brand);
+  }
+}
+
+.aboutCopy {
+  margin: 2.4rem 0;
+  max-width: 700px;
+  font-weight: 200;
+  line-height: 1.7;
+}
