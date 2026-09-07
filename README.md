@@ -42,3 +42,8 @@ This portfolio features my work at Deluxe Creation Studios, including:
 - Twitter/X: [@DanielZeus2099](https://x.com/DanielZeus2099)
 - Instagram: [@daniel_zeus1](https://www.instagram.com/daniel_zeus1)
 - TikTok: [@daniel_zeus2099](https://www.tiktok.com/@daniel_zeus2099)
+
+## 🙏 Acknowledgments
+
+- Base portfolio template and layout adapted from [@fabiconcept](https://github.com/fabiconcept/My-Portfolio).
+
