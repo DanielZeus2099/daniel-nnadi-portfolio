@@ -2,9 +2,14 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2.0rem 2.8rem;
+  width: 100%;
+  max-width: 100%;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
   }
 }
 
@@ -124,6 +129,8 @@
 
 .projectDescription {
   font-weight: 200;
+  word-break: break-word;
+  overflow-wrap: break-word;
 
   span {
     display: inline-block;
@@ -144,6 +151,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1.2rem;
+  word-break: break-word;
+  overflow-wrap: break-word;
 
   font-size: var(--text-xs);
   color: var(--brand);

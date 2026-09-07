@@ -1,7 +1,7 @@
 import styles from "./medialightbox.module.scss";
 import { useEffect, useState, useCallback, useRef } from "react";
 import ReactDOM from "react-dom";
-import { MdClose, MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { MdClose } from "react-icons/md";
 
 export const MediaLightbox = ({ items, initialIndex = 0, isOpen, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
@@ -14,13 +14,37 @@ export const MediaLightbox = ({ items, initialIndex = 0, isOpen, onClose }) => {
     }
   }, [isOpen, initialIndex]);
 
+  // Handle phone hardware/browser Back button to close lightbox
+  useEffect(() => {
+    if (!isOpen) return;
+
+    let poppedByBack = false;
+    window.history.pushState({ lightbox: true }, "");
+
+    const handlePopState = () => {
+      poppedByBack = true;
+      onClose();
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+      if (!poppedByBack && window.history.state?.lightbox) {
+        window.history.back();
+      }
+    };
+  }, [isOpen, onClose]);
+
   const goNext = useCallback(() => {
+    if (!items || items.length <= 1) return;
     setCurrentIndex((prev) => (prev + 1) % items.length);
-  }, [items.length]);
+  }, [items]);
 
   const goPrev = useCallback(() => {
+    if (!items || items.length <= 1) return;
     setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
-  }, [items.length]);
+  }, [items]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -47,7 +71,7 @@ export const MediaLightbox = ({ items, initialIndex = 0, isOpen, onClose }) => {
   const handleTouchEnd = () => {
     if (touchStartX.current === null || touchEndX.current === null) return;
     const diff = touchStartX.current - touchEndX.current;
-    const minSwipeDistance = 50;
+    const minSwipeDistance = 40;
 
     if (Math.abs(diff) > minSwipeDistance) {
       if (diff > 0) goNext();
@@ -70,24 +94,14 @@ export const MediaLightbox = ({ items, initialIndex = 0, isOpen, onClose }) => {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      <button className={styles.closeBtn} onClick={onClose}>
+      <button className={styles.closeBtn} onClick={onClose} aria-label="Close image">
         <MdClose />
       </button>
 
-      <div className={styles.counter}>
-        {currentIndex + 1} / {items.length}
-      </div>
-
       {items.length > 1 && (
-        <button
-          className={`${styles.navBtn} ${styles.navLeft}`}
-          onClick={(e) => {
-            e.stopPropagation();
-            goPrev();
-          }}
-        >
-          <MdChevronLeft />
-        </button>
+        <div className={styles.counter}>
+          {currentIndex + 1} / {items.length}
+        </div>
       )}
 
       <div
@@ -111,24 +125,13 @@ export const MediaLightbox = ({ items, initialIndex = 0, isOpen, onClose }) => {
             className={styles.mediaContent}
             src={current.src}
             alt={current.label || "Media preview"}
+            draggable={false}
           />
         )}
         {current.label && (
           <p className={styles.mediaLabel}>{current.label}</p>
         )}
       </div>
-
-      {items.length > 1 && (
-        <button
-          className={`${styles.navBtn} ${styles.navRight}`}
-          onClick={(e) => {
-            e.stopPropagation();
-            goNext();
-          }}
-        >
-          <MdChevronRight />
-        </button>
-      )}
     </div>
   );
 

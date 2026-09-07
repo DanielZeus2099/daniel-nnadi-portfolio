@@ -164,7 +164,75 @@ export const ProjectModal = ({
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
+  const pauseAllVideos = () => {
+    if (typeof document === "undefined") return;
+    const videoElements = document.querySelectorAll("video");
+    videoElements.forEach((vid) => {
+      try {
+        if (!vid.paused) {
+          vid.pause();
+        }
+      } catch (e) {
+        // ignore
+      }
+    });
+  };
+
+  // Pause videos when Lightbox opens
+  useEffect(() => {
+    if (lightboxOpen) {
+      pauseAllVideos();
+    }
+  }, [lightboxOpen]);
+
+  // Pause videos when modal is closed
+  useEffect(() => {
+    if (!isOpen) {
+      pauseAllVideos();
+    }
+  }, [isOpen]);
+
+  // Pause videos when browser is minimized, tab switched, or window blurred
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        pauseAllVideos();
+      }
+    };
+
+    const handleBlur = () => {
+      pauseAllVideos();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("blur", handleBlur);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("blur", handleBlur);
+    };
+  }, [isOpen]);
+
+  // Handle mobile/browser Back button to close modal
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handlePopState = () => {
+      if (!lightboxOpen) {
+        onClose();
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [isOpen, lightboxOpen, onClose]);
+
   const handleOpenLightbox = (index) => {
+    pauseAllVideos();
     setLightboxIndex(index);
     setLightboxOpen(true);
   };
@@ -350,11 +418,6 @@ export const ProjectModal = ({
                 )
               )}
             </div>
-
-            {/* Mobile Bottom Close Button */}
-            <button className={styles.bottomCloseBtn} onClick={onClose}>
-              <MdClose /> Close Project
-            </button>
           </div>
         </div>
       </motion.div>

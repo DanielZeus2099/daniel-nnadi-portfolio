@@ -158,10 +158,10 @@ export const Project = ({
               )}
             </div>
           </Reveal>
-          <Reveal>
+          <Reveal width="100%">
             <div className={styles.projectTech}>{tech.join(" - ")}</div>
           </Reveal>
-          <Reveal>
+          <Reveal width="100%">
             <p className={styles.projectDescription}>
               {description}{" "}
               <span onClick={openModal}>{currentProject} Learn more {">"}</span>

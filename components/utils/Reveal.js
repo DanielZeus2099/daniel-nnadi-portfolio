@@ -25,6 +25,8 @@ export const Reveal = ({ children, width = "fit-content" }) => {
       style={{
         position: "relative",
         width,
+        maxWidth: "100%",
+        boxSizing: "border-box",
         overflow: animDone ? "visible" : "hidden",
       }}
     >

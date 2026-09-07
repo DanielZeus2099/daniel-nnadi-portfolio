@@ -3,7 +3,6 @@ import {
   AiFillLinkedin,
   AiFillTwitterCircle,
   AiFillInstagram,
-  AiFillFacebook,
   AiFillGithub,
 } from "react-icons/ai";
 import { FaTiktok } from "react-icons/fa";
@@ -61,17 +60,6 @@ export const MyLinks = () => {
         initial={{ y: -30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        title="Facebook"
-      >
-        <Link href="https://www.facebook.com/share/19L4wLk8KM/" target="_blank" rel="nofollow">
-          <AiFillFacebook size="2.4rem" />
-        </Link>
-      </motion.span>
-
-      <motion.span
-        initial={{ y: -30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
         title="TikTok"
       >
         <Link href="https://www.tiktok.com/@daniel_zeus2099" target="_blank" rel="nofollow">
