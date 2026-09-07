@@ -28,13 +28,15 @@
   font-weight: 900;
   line-height: 1.2;
   padding-bottom: 0.4rem;
+  word-break: break-word;
 
   span {
     color: var(--brand);
   }
 
   @media (max-width: 768px) {
-    font-size: var(--text-xl);
+    font-size: clamp(3.2rem, 8.5vw, 4.6rem);
+    line-height: 1.2;
   }
 }
 
@@ -49,6 +51,11 @@
     font-weight: bold;
     color: var(--brand);
   }
+
+  @media (max-width: 768px) {
+    font-size: clamp(2.0rem, 5.5vw, 2.8rem);
+    margin-top: 1.2rem;
+  }
 }
 
 .aboutCopy {
@@ -56,4 +63,10 @@
   max-width: 700px;
   font-weight: 200;
   line-height: 1.7;
+
+  @media (max-width: 768px) {
+    margin: 1.8rem 0;
+    font-size: 1.6rem;
+    line-height: 1.6;
+  }
 }

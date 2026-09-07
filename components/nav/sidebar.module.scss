@@ -2,6 +2,7 @@
   background: var(--background-dark);
 
   height: 100vh;
+  height: 100dvh;
 
   position: sticky;
   top: 0px;
@@ -11,7 +12,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow-y: scroll;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */

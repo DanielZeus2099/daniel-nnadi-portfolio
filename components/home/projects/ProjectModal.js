@@ -5,13 +5,14 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { AiFillGithub, AiOutlineExport, AiFillCrown, AiFillStar, AiFillTag } from "react-icons/ai";
 import { FaApple, FaGooglePlay, FaSteam } from "react-icons/fa";
-import { MdClose, MdConstruction, MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { MdClose, MdConstruction, MdChevronLeft, MdChevronRight, MdZoomIn } from "react-icons/md";
 import { projectType } from "./Projects";
+import { MediaLightbox } from "./MediaLightbox";
 import Image from "next/image";
 import Head from "next/head";
 
 /* ─── Image Carousel (inline in modal) ─── */
-const ImageCarousel = ({ images }) => {
+const ImageCarousel = ({ images, onImageClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const trackRef = useRef(null);
 
@@ -71,9 +72,17 @@ const ImageCarousel = ({ images }) => {
               src={img.src}
               alt={img.label || "Project image"}
               className={styles.carouselImage}
+              onClick={() => onImageClick && onImageClick(i)}
+              title="Tap to view fullscreen"
             />
             {img.label && (
-              <span className={styles.carouselLabel}>{img.label}</span>
+              <span
+                className={styles.carouselLabel}
+                onClick={() => onImageClick && onImageClick(i)}
+                title="Tap to view fullscreen"
+              >
+                {img.label} <MdZoomIn style={{ verticalAlign: "middle", marginLeft: 4, fontSize: "1.4em", color: "var(--brand)" }} />
+              </span>
             )}
           </div>
         ))}
@@ -146,15 +155,34 @@ export const ProjectModal = ({
   const videos = devMedia ? devMedia.filter((m) => m.type === "video") : [];
   const images = devMedia ? devMedia.filter((m) => m.type === "image") : [];
 
+  // Combined images for full-screen zoomable lightbox
+  const allLightboxImages = [
+    { src: imgSrc, label: `${title} - Cover Artwork`, type: "image" },
+    ...images,
+  ];
+
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const handleOpenLightbox = (index) => {
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+  };
+
   const content = (
     <div className={styles.modal} onClick={onClose}>
-      <button className={styles.closeModalBtn} onClick={onClose}>
+      <button
+        className={styles.closeModalBtn}
+        onClick={onClose}
+        aria-label="Close project modal"
+      >
         <MdClose />
       </button>
 
       <motion.div
-        initial={{ y: 100, opacity: 0 }}
+        initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.3 }}
         onClick={(e) => e.stopPropagation()}
         className={styles.modalCard}
       >
@@ -181,14 +209,24 @@ export const ProjectModal = ({
           </div>
         )}
 
-        {/* ── Header Image ── */}
-        <Image
-          className={styles.modalImage}
-          src={imgSrc}
-          alt={`An image of the ${title} project.`}
-          width={1000}
-          height={500}
-        />
+        {/* ── Header Image with Zoom Trigger ── */}
+        <div
+          className={styles.modalImageWrapper}
+          onClick={() => handleOpenLightbox(0)}
+          title="Tap to view full screen & zoom"
+        >
+          <Image
+            className={styles.modalImage}
+            src={imgSrc}
+            alt={`An image of the ${title} project.`}
+            width={1000}
+            height={500}
+            priority
+          />
+          <div className={styles.zoomHintBadge}>
+            <MdZoomIn /> Tap to zoom
+          </div>
+        </div>
 
         <div className={styles.modalContent}>
           {/* ── Title & Tech ── */}
@@ -263,7 +301,10 @@ export const ProjectModal = ({
               ))}
 
               {/* Image Carousel */}
-              <ImageCarousel images={images} />
+              <ImageCarousel
+                images={images}
+                onImageClick={(idx) => handleOpenLightbox(idx + 1)}
+              />
             </div>
           )}
 
@@ -309,6 +350,11 @@ export const ProjectModal = ({
                 )
               )}
             </div>
+
+            {/* Mobile Bottom Close Button */}
+            <button className={styles.bottomCloseBtn} onClick={onClose}>
+              <MdClose /> Close Project
+            </button>
           </div>
         </div>
       </motion.div>
@@ -317,11 +363,19 @@ export const ProjectModal = ({
 
   if (!isOpen) return <></>;
 
-  return <>
-    <Head>
-      <title>Project - {title}</title>
-      <meta name="description" content={description} />
-    </Head>
-    {ReactDOM.createPortal(content, document.getElementById("root"))}
-  </>
+  return (
+    <>
+      <Head>
+        <title>Project - {title}</title>
+        <meta name="description" content={description} />
+      </Head>
+      {ReactDOM.createPortal(content, document.getElementById("root"))}
+      <MediaLightbox
+        items={allLightboxImages}
+        initialIndex={lightboxIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+      />
+    </>
+  );
 };
