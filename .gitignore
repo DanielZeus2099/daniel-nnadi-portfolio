@@ -37,4 +37,10 @@ next-env.d.ts
 
 # local test/reference media
 public/VID-*.mp4
+ignore/
+Ignore/
+public/ignore/
+public/Ignore/
+**/[iI]gnore/**
+
 

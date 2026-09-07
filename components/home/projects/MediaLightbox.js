@@ -31,7 +31,13 @@ export const MediaLightbox = ({ items, initialIndex = 0, isOpen, onClose }) => {
     return () => {
       window.removeEventListener("popstate", handlePopState);
       if (!poppedByBack && window.history.state?.lightbox) {
-        window.history.back();
+        if (typeof window !== "undefined") {
+          window.__suppressModalClose = true;
+          window.history.back();
+          setTimeout(() => {
+            window.__suppressModalClose = false;
+          }, 300);
+        }
       }
     };
   }, [isOpen, onClose]);

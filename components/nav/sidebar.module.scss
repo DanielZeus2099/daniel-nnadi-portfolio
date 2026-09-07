@@ -3,11 +3,12 @@
 
   height: 100vh;
   height: 100dvh;
+  width: 60px;
 
-  position: sticky;
+  position: fixed;
   top: 0px;
   left: 0px;
-  z-index: 20;
+  z-index: 60;
 
   display: flex;
   flex-direction: column;

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { AiFillGithub, AiOutlineExport, AiFillCrown, AiFillStar, AiFillTag } from "react-icons/ai";
 import { FaApple, FaGooglePlay, FaSteam } from "react-icons/fa";
-import { MdClose, MdConstruction, MdChevronLeft, MdChevronRight, MdZoomIn } from "react-icons/md";
+import { MdClose, MdConstruction, MdZoomIn } from "react-icons/md";
 import { projectType } from "./Projects";
 import { MediaLightbox } from "./MediaLightbox";
 import Image from "next/image";
@@ -14,7 +14,6 @@ import Head from "next/head";
 /* ─── Image Carousel (inline in modal) ─── */
 const ImageCarousel = ({ images, onImageClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const trackRef = useRef(null);
 
   const goNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % images.length);
@@ -40,7 +39,7 @@ const ImageCarousel = ({ images, onImageClick }) => {
   const handleTouchEnd = () => {
     if (touchStartX.current === null || touchEndX.current === null) return;
     const diff = touchStartX.current - touchEndX.current;
-    if (Math.abs(diff) > 50) {
+    if (Math.abs(diff) > 40) {
       if (diff > 0) goNext();
       else goPrev();
     }
@@ -52,17 +51,12 @@ const ImageCarousel = ({ images, onImageClick }) => {
 
   return (
     <div className={styles.imageCarousel}>
-      <div className={styles.carouselViewport}>
-        {images.length > 1 && (
-          <button
-            className={`${styles.carouselNav} ${styles.carouselNavLeft}`}
-            onClick={goPrev}
-            aria-label="Previous image"
-          >
-            <MdChevronLeft />
-          </button>
-        )}
-
+      <div
+        className={styles.carouselViewport}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         {images.map((img, i) => (
           <div
             key={i}
@@ -72,6 +66,7 @@ const ImageCarousel = ({ images, onImageClick }) => {
               src={img.src}
               alt={img.label || "Project image"}
               className={styles.carouselImage}
+              draggable={false}
               onClick={() => onImageClick && onImageClick(i)}
               title="Tap to view fullscreen"
             />
@@ -86,16 +81,6 @@ const ImageCarousel = ({ images, onImageClick }) => {
             )}
           </div>
         ))}
-
-        {images.length > 1 && (
-          <button
-            className={`${styles.carouselNav} ${styles.carouselNavRight}`}
-            onClick={goNext}
-            aria-label="Next image"
-          >
-            <MdChevronRight />
-          </button>
-        )}
       </div>
 
       {images.length > 1 && (
@@ -163,6 +148,11 @@ export const ProjectModal = ({
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const lightboxOpenRef = useRef(false);
+
+  useEffect(() => {
+    lightboxOpenRef.current = lightboxOpen;
+  }, [lightboxOpen]);
 
   const pauseAllVideos = () => {
     if (typeof document === "undefined") return;
@@ -220,8 +210,17 @@ export const ProjectModal = ({
     if (!isOpen) return;
 
     const handlePopState = () => {
-      if (!lightboxOpen) {
-        onClose();
+      if (typeof window !== "undefined" && window.__suppressModalClose) {
+        return;
+      }
+      if (lightboxOpenRef.current) {
+        return;
+      }
+      if (typeof window !== "undefined") {
+        const url = new URL(window.location.href);
+        if (!url.searchParams.has("project")) {
+          onClose();
+        }
       }
     };
 
@@ -229,7 +228,7 @@ export const ProjectModal = ({
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
-  }, [isOpen, lightboxOpen, onClose]);
+  }, [isOpen, onClose]);
 
   const handleOpenLightbox = (index) => {
     pauseAllVideos();
@@ -283,13 +282,10 @@ export const ProjectModal = ({
           onClick={() => handleOpenLightbox(0)}
           title="Tap to view full screen & zoom"
         >
-          <Image
+          <img
             className={styles.modalImage}
             src={imgSrc}
             alt={`An image of the ${title} project.`}
-            width={1000}
-            height={500}
-            priority
           />
           <div className={styles.zoomHintBadge}>
             <MdZoomIn /> Tap to zoom
