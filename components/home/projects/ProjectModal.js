@@ -152,25 +152,17 @@ export const ProjectModal = ({
   projectEvolution,
   devMedia,
 }) => {
-  const modalRef = useRef(null);
-
   useEffect(() => {
     const body = document.querySelector("body");
     if (!body) return;
 
     if (isOpen) {
       body.style.overflowY = "hidden";
-      // Ensure modal scrolls to the very top when opened
-      requestAnimationFrame(() => {
-        if (modalRef.current) {
-          modalRef.current.scrollTop = 0;
-        }
-      });
     } else {
-      body.style.overflowY = "";
+      body.style.overflowY = "auto";
     }
     return () => {
-      body.style.overflowY = "";
+      body.style.overflowY = "auto";
     };
   }, [isOpen]);
 
@@ -272,7 +264,7 @@ export const ProjectModal = ({
   };
 
   const content = (
-    <div ref={modalRef} className={styles.modal} onClick={onClose}>
+    <div className={styles.modal} onClick={onClose}>
       <button
         className={styles.closeModalBtn}
         onClick={onClose}
@@ -448,10 +440,7 @@ export const ProjectModal = ({
     </div>
   );
 
-  if (!isOpen) return null;
-
-  const rootEl = typeof document !== "undefined" ? document.getElementById("root") : null;
-  if (!rootEl) return null;
+  if (!isOpen) return <></>;
 
   return (
     <>
@@ -459,7 +448,7 @@ export const ProjectModal = ({
         <title>Project - {title}</title>
         <meta name="description" content={description} />
       </Head>
-      {ReactDOM.createPortal(content, rootEl)}
+      {ReactDOM.createPortal(content, document.getElementById("root"))}
       <MediaLightbox
         items={allLightboxImages}
         initialIndex={lightboxIndex}
