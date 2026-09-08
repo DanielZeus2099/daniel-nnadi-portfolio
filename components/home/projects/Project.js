@@ -74,6 +74,7 @@ export const Project = ({
         initial="hidden"
         animate={controls}
         transition={{ duration: 0.75 }}
+        style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}
       >
         <div
           onMouseEnter={() => setHovered(true)}
@@ -120,42 +121,44 @@ export const Project = ({
               <h4>{title}</h4>
               <div className={styles.projectTitleLine} />
 
-              {type !== projectType.professional && code && (
-                <Link href={code} target="_blank" rel="nofollow" title="Source Code">
-                  <AiFillGithub size="1.8rem" />
-                </Link>
-              )}
+              <div className={styles.projectLinks}>
+                {type !== projectType.professional && code && (
+                  <Link href={code} target="_blank" rel="nofollow" title="Source Code">
+                    <AiFillGithub size="1.8rem" />
+                  </Link>
+                )}
 
-              {typeof projectLink === "object" ? (
-                <>
-                  {projectLink.playStore && (
-                    <Link href={projectLink.playStore} target="_blank" rel="nofollow" title="Google Play Store">
-                      <FaGooglePlay size="1.6rem" />
-                    </Link>
-                  )}
-                  {projectLink.appStore && (
-                    <Link href={projectLink.appStore} target="_blank" rel="nofollow" title="Apple App Store">
-                      <FaApple size="1.8rem" />
-                    </Link>
-                  )}
-                  {projectLink.steam && (
-                    <Link href={projectLink.steam} target="_blank" rel="nofollow" title="Steam Store">
-                      <FaSteam size="1.8rem" />
-                    </Link>
-                  )}
-                  {projectLink.demo && (
-                    <Link href={projectLink.demo} target="_blank" rel="nofollow" title="Live Project / Demo">
+                {typeof projectLink === "object" ? (
+                  <>
+                    {projectLink.playStore && (
+                      <Link href={projectLink.playStore} target="_blank" rel="nofollow" title="Google Play Store">
+                        <FaGooglePlay size="1.6rem" />
+                      </Link>
+                    )}
+                    {projectLink.appStore && (
+                      <Link href={projectLink.appStore} target="_blank" rel="nofollow" title="Apple App Store">
+                        <FaApple size="1.8rem" />
+                      </Link>
+                    )}
+                    {projectLink.steam && (
+                      <Link href={projectLink.steam} target="_blank" rel="nofollow" title="Steam Store">
+                        <FaSteam size="1.8rem" />
+                      </Link>
+                    )}
+                    {projectLink.demo && (
+                      <Link href={projectLink.demo} target="_blank" rel="nofollow" title="Live Project / Demo">
+                        <AiOutlineExport size="1.8rem" />
+                      </Link>
+                    )}
+                  </>
+                ) : (
+                  projectLink && (
+                    <Link href={projectLink} target="_blank" rel="nofollow" title="Live Project / Demo">
                       <AiOutlineExport size="1.8rem" />
                     </Link>
-                  )}
-                </>
-              ) : (
-                projectLink && (
-                  <Link href={projectLink} target="_blank" rel="nofollow" title="Live Project / Demo">
-                    <AiOutlineExport size="1.8rem" />
-                  </Link>
-                )
-              )}
+                  )
+                )}
+              </div>
             </div>
           </Reveal>
           <Reveal width="100%">

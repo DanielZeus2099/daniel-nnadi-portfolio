@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { AiFillGithub, AiOutlineExport, AiFillCrown, AiFillStar, AiFillTag } from "react-icons/ai";
 import { FaApple, FaGooglePlay, FaSteam } from "react-icons/fa";
-import { MdClose, MdConstruction, MdZoomIn } from "react-icons/md";
+import { MdClose, MdConstruction, MdChevronLeft, MdChevronRight, MdZoomIn } from "react-icons/md";
 import { projectType } from "./Projects";
 import { MediaLightbox } from "./MediaLightbox";
 import Image from "next/image";
@@ -57,6 +57,19 @@ const ImageCarousel = ({ images, onImageClick }) => {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
+        {images.length > 1 && (
+          <button
+            className={`${styles.carouselNav} ${styles.carouselNavLeft}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              goPrev();
+            }}
+            aria-label="Previous image"
+          >
+            <MdChevronLeft />
+          </button>
+        )}
+
         {images.map((img, i) => (
           <div
             key={i}
@@ -81,6 +94,19 @@ const ImageCarousel = ({ images, onImageClick }) => {
             )}
           </div>
         ))}
+
+        {images.length > 1 && (
+          <button
+            className={`${styles.carouselNav} ${styles.carouselNavRight}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              goNext();
+            }}
+            aria-label="Next image"
+          >
+            <MdChevronRight />
+          </button>
+        )}
       </div>
 
       {images.length > 1 && (
@@ -127,24 +153,25 @@ export const ProjectModal = ({
   devMedia,
 }) => {
   useEffect(() => {
-    const body = document.querySelector("body");
-
     if (isOpen) {
-      body.style.overflowY = "hidden";
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
     } else {
-      body.style.overflowY = "scroll";
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     }
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
   }, [isOpen]);
 
   // Separate videos and images from devMedia
   const videos = devMedia ? devMedia.filter((m) => m.type === "video") : [];
   const images = devMedia ? devMedia.filter((m) => m.type === "image") : [];
 
-  // Combined images for full-screen zoomable lightbox
-  const allLightboxImages = [
-    { src: imgSrc, label: `${title} - Cover Artwork`, type: "image" },
-    ...images,
-  ];
+  // Combined images for full-screen zoomable lightbox (dev screenshots only, not the header)
+  const allLightboxImages = images;
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
@@ -276,20 +303,13 @@ export const ProjectModal = ({
           </div>
         )}
 
-        {/* ── Header Image with Zoom Trigger ── */}
-        <div
-          className={styles.modalImageWrapper}
-          onClick={() => handleOpenLightbox(0)}
-          title="Tap to view full screen & zoom"
-        >
+        {/* ── Header Image ── */}
+        <div className={styles.modalImageWrapper}>
           <img
             className={styles.modalImage}
             src={imgSrc}
             alt={`An image of the ${title} project.`}
           />
-          <div className={styles.zoomHintBadge}>
-            <MdZoomIn /> Tap to zoom
-          </div>
         </div>
 
         <div className={styles.modalContent}>
@@ -367,7 +387,7 @@ export const ProjectModal = ({
               {/* Image Carousel */}
               <ImageCarousel
                 images={images}
-                onImageClick={(idx) => handleOpenLightbox(idx + 1)}
+                onImageClick={(idx) => handleOpenLightbox(idx)}
               />
             </div>
           )}
