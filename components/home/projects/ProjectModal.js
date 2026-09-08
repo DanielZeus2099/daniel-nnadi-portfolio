@@ -152,12 +152,20 @@ export const ProjectModal = ({
   projectEvolution,
   devMedia,
 }) => {
+  const modalRef = useRef(null);
+
   useEffect(() => {
     const body = document.querySelector("body");
     if (!body) return;
 
     if (isOpen) {
       body.style.overflowY = "hidden";
+      // Ensure modal scrolls to the very top when opened
+      requestAnimationFrame(() => {
+        if (modalRef.current) {
+          modalRef.current.scrollTop = 0;
+        }
+      });
     } else {
       body.style.overflowY = "";
     }
@@ -264,7 +272,7 @@ export const ProjectModal = ({
   };
 
   const content = (
-    <div className={styles.modal} onClick={onClose}>
+    <div ref={modalRef} className={styles.modal} onClick={onClose}>
       <button
         className={styles.closeModalBtn}
         onClick={onClose}
