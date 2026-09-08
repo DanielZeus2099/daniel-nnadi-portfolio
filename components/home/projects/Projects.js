@@ -53,7 +53,7 @@ export const MyProjects = [
       "Programmed and integrated a health-pack system with drone delivery to solve balancing issues discovered during playtesting, especially during punishing boss encounters.",
       "Collaborated closely with the art team to cleanly swap primitive blocks and placeholder shapes with final 2D pixel-art assets once mechanics were fully tuned.",
       "Iterated on gameplay balancing based on playtester feedback, adding tactical layers like purchasable health packs and ad-based rewards on mobile.",
-      "Set up unique levels, such as a chase (racing) level and a tower defence level, to add some variety to the gameplay loop.",
+      "Set up unique levels, such as a chase (racing) level and a tower defense level, to add some variety to the gameplay loop.",
     ],
     projectEvolution:
       "The first playable build of Rasta Santa played well mechanically, but playtesting quickly exposed a serious balancing problem, some enemies and the final boss encounter was brutally punishing, and most casual gamers couldn't survive past the second stage. Rather than simply lowering enemy health, we came up with an interesting solution: a health-pack system that players could summon mid-combat by purchasing one or watching a rewarded ad. I programmed a drone delivery mechanic that physically flies the health pack to the player's position. This single addition transformed the pacing of the entire game and became one of its most praised features.",
