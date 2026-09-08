@@ -159,10 +159,10 @@ export const ProjectModal = ({
     if (isOpen) {
       body.style.overflowY = "hidden";
     } else {
-      body.style.overflowY = "auto";
+      body.style.overflowY = "";
     }
     return () => {
-      body.style.overflowY = "auto";
+      body.style.overflowY = "";
     };
   }, [isOpen]);
 
@@ -440,7 +440,10 @@ export const ProjectModal = ({
     </div>
   );
 
-  if (!isOpen) return <></>;
+  if (!isOpen) return null;
+
+  const rootEl = typeof document !== "undefined" ? document.getElementById("root") : null;
+  if (!rootEl) return null;
 
   return (
     <>
@@ -448,7 +451,7 @@ export const ProjectModal = ({
         <title>Project - {title}</title>
         <meta name="description" content={description} />
       </Head>
-      {ReactDOM.createPortal(content, document.getElementById("root"))}
+      {ReactDOM.createPortal(content, rootEl)}
       <MediaLightbox
         items={allLightboxImages}
         initialIndex={lightboxIndex}

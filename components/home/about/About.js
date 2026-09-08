@@ -23,12 +23,12 @@ export const About = () => {
           </Reveal>
           <Reveal>
             <p className={styles.aboutText}>
-              I believe that Africa's game industry is an untapped goldmine, and integrating African culture, environments, and stories into modern video games is a formula for incredible success. This inspired my work with Qlipit.io, where I designed African-themed characters for their upcoming gaming series, &quot;The Beningin&quot;, and minted creative pieces on platforms like OpenSea, Paras, and Mintbase.
+              I believe that Africa&apos;s game industry is an untapped goldmine, and integrating African culture, environments, and stories into modern video games is a formula for incredible success. This inspired my work with Qlipit.io, where I designed African-themed characters for their upcoming gaming series, &quot;The Beningin&quot;, and minted creative pieces on platforms like OpenSea, Paras, and Mintbase.
             </p>
           </Reveal>
           <Reveal>
             <p className={styles.aboutText}>
-              I hold a Computer Science degree from Imo State University. When I'm not developing games, I spend a lot of time playing and learning from them. I dive into almost every genre; from fast-paced shooters and cozy simulators to massive open-world RPGs and action-adventures like Elden Ring, Grand Theft Auto, and Assassin's Creed. Always dissecting their core mechanics and systems to see how they are programmed.
+              I hold a Computer Science degree from Imo State University. When I&apos;m not developing games, I spend a lot of time playing and learning from them. I dive into almost every genre; from fast-paced shooters and cozy simulators to massive open-world RPGs and action-adventures like Elden Ring, Grand Theft Auto, and Assassin&apos;s Creed. Always dissecting their core mechanics and systems to see how they are programmed.
             </p>
           </Reveal>
           <Reveal>

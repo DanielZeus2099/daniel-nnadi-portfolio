@@ -270,5 +270,8 @@ export const MediaLightbox = ({ items, initialIndex = 0, isOpen, onClose }) => {
     </div>
   );
 
-  return ReactDOM.createPortal(content, document.getElementById("root"));
+  const rootEl = typeof document !== "undefined" ? document.getElementById("root") : null;
+  if (!rootEl) return null;
+
+  return ReactDOM.createPortal(content, rootEl);
 };

@@ -167,7 +167,7 @@ export const Project = ({
           <Reveal width="100%">
             <p className={styles.projectDescription}>
               {description}{" "}
-              <span onClick={openModal}>{currentProject} Learn more {">"}</span>
+              <span onClick={openModal}>Learn more {">"}</span>
             </p>
           </Reveal>
         </div>

@@ -13,6 +13,8 @@
   justify-content: space-between;
   overflow: hidden;
   background: var(--bg-opaque);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 
   font-size: var(--text-md);
   font-weight: bold;
@@ -30,9 +32,10 @@
 
 .filter_ios {
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   filter: url(#lensFilter) saturate(140%);
   position: absolute;
   inset: 0;
-  z-index: 19;
+  z-index: 0;
   pointer-events: none;
 }
