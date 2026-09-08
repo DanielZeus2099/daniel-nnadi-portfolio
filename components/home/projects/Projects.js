@@ -79,7 +79,7 @@ export const MyProjects = [
     devInfo: {
       game: "Grow Farm Garden: Cozy Farming",
       company: "Deluxe Creation Studios",
-      genre: "Simulation / Physics",
+      genre: "Simulation / Farming",
       engine: "Unity",
       platforms: "Android, iOS",
       role: "Gameplay Programmer",
@@ -163,7 +163,7 @@ export const MyProjects = [
     devInfo: {
       game: "Finger Gunner: AI Robot FPS",
       company: "Deluxe Creation Studios",
-      genre: "FPS / Action",
+      genre: "FPS / Action / Shooter",
       engine: "Unity",
       platforms: "Android, iOS",
       role: "Gameplay Programmer",
