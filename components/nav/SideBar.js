@@ -6,25 +6,54 @@ export const SideBar = () => {
   const [selected, setSelected] = useState("");
 
   useEffect(() => {
-    const sections = document.querySelectorAll(".section-wrapper");
+    const sectionIds = ["about", "projects", "experience", "contact"];
 
-    const options = {
-      threshold: 0.3,
-    };
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight;
 
-    const callback = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setSelected(entry.target.id);
+      // 1. If at the bottom of the page, highlight the last section ('contact')
+      if (scrollY + windowHeight >= docHeight - 60) {
+        setSelected("contact");
+        return;
+      }
+
+      // 2. If near top of the page (in Hero), clear selection
+      const aboutEl = document.getElementById("about");
+      if (aboutEl) {
+        const aboutRect = aboutEl.getBoundingClientRect();
+        if (aboutRect.top > windowHeight * 0.45) {
+          setSelected("");
+          return;
         }
-      });
+      }
+
+      // 3. Focal point for active section (around upper-middle of viewport)
+      const focalY = windowHeight * 0.35;
+
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sectionIds[i]);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= focalY) {
+            setSelected(sectionIds[i]);
+            return;
+          }
+        }
+      }
     };
 
-    const observer = new IntersectionObserver(callback, options);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll, { passive: true });
 
-    sections.forEach((section) => {
-      return observer.observe(section);
-    });
+    // Run on mount
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
   }, []);
 
   return (

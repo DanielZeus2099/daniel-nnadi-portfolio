@@ -21,14 +21,6 @@ export const Heading = () => {
 
           {/* Top displacement - push content down */}
           <feOffset in="blur" dx="0" dy="-30" result="topBlur" />
-          <feDisplacementMap
-            in="SourceGraphic"
-            in2="topBlur"
-            scale="60"
-            xChannelSelector="A"
-            yChannelSelector="A"
-            result="topDisplace"
-          />
 
           {/* Bottom displacement - push content up */}
           <feOffset in="blur" dx="0" dy="30" result="bottomBlur" />

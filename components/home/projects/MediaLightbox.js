@@ -133,7 +133,7 @@ export const MediaLightbox = ({ items, initialIndex = 0, isOpen, onClose }) => {
   // Double tap detection on touch devices
   const handleImageTouchEnd = (e) => {
     const now = Date.now();
-    if (now - lastTapRef.current < 300) {
+    if (now - lastTapRef.current < 350) {
       e.preventDefault();
       e.stopPropagation();
       toggleZoom();
@@ -146,6 +146,10 @@ export const MediaLightbox = ({ items, initialIndex = 0, isOpen, onClose }) => {
   // Safe overlay click that ignores mobile synthetic click right after opening
   const handleOverlayClick = () => {
     if (Date.now() - mountTimeRef.current < 350) {
+      return;
+    }
+    if (isZoomed) {
+      setIsZoomed(false);
       return;
     }
     onClose();
@@ -174,13 +178,13 @@ export const MediaLightbox = ({ items, initialIndex = 0, isOpen, onClose }) => {
         <MdClose />
       </button>
 
-      {items.length > 1 && (
+      {items.length > 1 && !isZoomed && (
         <div className={styles.counter}>
           {currentIndex + 1} / {items.length}
         </div>
       )}
 
-      {items.length > 1 && (
+      {items.length > 1 && !isZoomed && (
         <button
           className={`${styles.navBtn} ${styles.navLeft}`}
           onClick={(e) => {
@@ -197,7 +201,14 @@ export const MediaLightbox = ({ items, initialIndex = 0, isOpen, onClose }) => {
         className={styles.mediaContainer}
         onClick={(e) => e.stopPropagation()}
       >
-        <div style={{ position: "relative", overflow: "hidden", borderRadius: "0.8rem" }}>
+        <div
+          style={{
+            position: "relative",
+            overflow: isZoomed ? "visible" : "hidden",
+            borderRadius: "0.8rem",
+            zIndex: isZoomed ? 20 : 1,
+          }}
+        >
           <AnimatePresence custom={direction} mode="wait">
             <motion.div
               key={currentIndex}
@@ -228,13 +239,19 @@ export const MediaLightbox = ({ items, initialIndex = 0, isOpen, onClose }) => {
                   src={current.src}
                   alt={current.label || "Media preview"}
                   draggable={false}
+                  drag={isZoomed}
+                  dragConstraints={{ left: -300, right: 300, top: -200, bottom: 200 }}
+                  dragElastic={0.15}
                   animate={{
                     scale: isZoomed ? 2.5 : 1,
+                    x: isZoomed ? undefined : 0,
+                    y: isZoomed ? undefined : 0,
                   }}
                   transition={{ type: "spring", stiffness: 300, damping: 25 }}
                   style={{
-                    cursor: isZoomed ? "zoom-out" : "zoom-in",
+                    cursor: isZoomed ? "grab" : "zoom-in",
                     transformOrigin: "center center",
+                    touchAction: isZoomed ? "none" : "auto",
                   }}
                   onDoubleClick={toggleZoom}
                   onTouchEnd={handleImageTouchEnd}
@@ -245,17 +262,17 @@ export const MediaLightbox = ({ items, initialIndex = 0, isOpen, onClose }) => {
           </AnimatePresence>
         </div>
 
-        {current.label && (
+        {current.label && !isZoomed && (
           <p className={styles.mediaLabel}>
             {current.label}
             <span style={{ display: "block", fontSize: "1.1rem", opacity: 0.6, marginTop: 4 }}>
-              {isZoomed ? "Double-tap to zoom out" : "Double-tap to zoom in"}
+              Double-tap or double-click to zoom in
             </span>
           </p>
         )}
       </div>
 
-      {items.length > 1 && (
+      {items.length > 1 && !isZoomed && (
         <button
           className={`${styles.navBtn} ${styles.navRight}`}
           onClick={(e) => {
