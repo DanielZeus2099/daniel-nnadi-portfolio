@@ -26,18 +26,27 @@ const ImageCarousel = ({ images, onImageClick }) => {
   // Touch/swipe support
   const touchStartX = useRef(null);
   const touchEndX = useRef(null);
+  const isSwiping = useRef(false);
 
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
     touchEndX.current = null;
+    isSwiping.current = false;
   };
 
   const handleTouchMove = (e) => {
     touchEndX.current = e.touches[0].clientX;
+    if (touchStartX.current !== null && Math.abs(touchStartX.current - touchEndX.current) > 8) {
+      isSwiping.current = true;
+    }
   };
 
   const handleTouchEnd = () => {
-    if (touchStartX.current === null || touchEndX.current === null) return;
+    if (touchStartX.current === null || touchEndX.current === null) {
+      touchStartX.current = null;
+      touchEndX.current = null;
+      return;
+    }
     const diff = touchStartX.current - touchEndX.current;
     if (Math.abs(diff) > 40) {
       if (diff > 0) goNext();
@@ -45,6 +54,10 @@ const ImageCarousel = ({ images, onImageClick }) => {
     }
     touchStartX.current = null;
     touchEndX.current = null;
+    // Allow small timeout before resetting isSwiping so pending clicks are ignored
+    setTimeout(() => {
+      isSwiping.current = false;
+    }, 100);
   };
 
   if (!images || images.length === 0) return null;
@@ -80,13 +93,19 @@ const ImageCarousel = ({ images, onImageClick }) => {
               alt={img.label || "Project image"}
               className={styles.carouselImage}
               draggable={false}
-              onClick={() => onImageClick && onImageClick(i)}
+              onClick={() => {
+                if (isSwiping.current) return;
+                onImageClick && onImageClick(i);
+              }}
               title="Tap to view fullscreen"
             />
             {img.label && (
               <span
                 className={styles.carouselLabel}
-                onClick={() => onImageClick && onImageClick(i)}
+                onClick={() => {
+                  if (isSwiping.current) return;
+                  onImageClick && onImageClick(i);
+                }}
                 title="Tap to view fullscreen"
               >
                 {img.label} <MdZoomIn style={{ verticalAlign: "middle", marginLeft: 4, fontSize: "1.4em", color: "var(--brand)" }} />
@@ -152,17 +171,84 @@ export const ProjectModal = ({
   projectEvolution,
   devMedia,
 }) => {
-  useEffect(() => {
-    const body = document.querySelector("body");
-    if (!body) return;
+  const modalContainerRef = useRef(null);
 
-    if (isOpen) {
-      body.style.overflowY = "hidden";
-    } else {
-      body.style.overflowY = "auto";
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const originalBodyOverflow = document.body.style.overflow;
+    const originalHtmlOverflow = document.documentElement.style.overflow;
+    const originalBodyOverscroll = document.body.style.overscrollBehavior;
+    const originalHtmlOverscroll = document.documentElement.style.overscrollBehavior;
+
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overscrollBehavior = "contain";
+    document.documentElement.style.overscrollBehavior = "contain";
+
+    const modalEl = modalContainerRef.current;
+    if (!modalEl) {
+      return () => {
+        document.body.style.overflow = originalBodyOverflow;
+        document.documentElement.style.overflow = originalHtmlOverflow;
+        document.body.style.overscrollBehavior = originalBodyOverscroll;
+        document.documentElement.style.overscrollBehavior = originalHtmlOverscroll;
+      };
     }
+
+    requestAnimationFrame(() => {
+      if (modalEl) {
+        modalEl.scrollTop = 0;
+      }
+    });
+
+    // Guard against scroll chaining at top and bottom boundaries
+    const handleWheel = (e) => {
+      const { scrollTop, scrollHeight, clientHeight } = modalEl;
+      const isAtTop = scrollTop <= 0;
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+      if ((isAtTop && e.deltaY < 0) || (isAtBottom && e.deltaY > 0)) {
+        e.preventDefault();
+      }
+    };
+
+    let touchStartY = 0;
+    const handleTouchStart = (e) => {
+      if (e.touches.length > 0) {
+        touchStartY = e.touches[0].clientY;
+      }
+    };
+
+    const handleTouchMove = (e) => {
+      if (e.touches.length === 0) return;
+      const { scrollTop, scrollHeight, clientHeight } = modalEl;
+      const currentY = e.touches[0].clientY;
+      const deltaY = currentY - touchStartY;
+      const isAtTop = scrollTop <= 0;
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+      // Pulling down when at top or pushing up when at bottom
+      if ((isAtTop && deltaY > 0) || (isAtBottom && deltaY < 0)) {
+        if (e.cancelable) {
+          e.preventDefault();
+        }
+      }
+    };
+
+    modalEl.addEventListener("wheel", handleWheel, { passive: false });
+    modalEl.addEventListener("touchstart", handleTouchStart, { passive: true });
+    modalEl.addEventListener("touchmove", handleTouchMove, { passive: false });
+
     return () => {
-      body.style.overflowY = "auto";
+      document.body.style.overflow = originalBodyOverflow;
+      document.documentElement.style.overflow = originalHtmlOverflow;
+      document.body.style.overscrollBehavior = originalBodyOverscroll;
+      document.documentElement.style.overscrollBehavior = originalHtmlOverscroll;
+
+      modalEl.removeEventListener("wheel", handleWheel);
+      modalEl.removeEventListener("touchstart", handleTouchStart);
+      modalEl.removeEventListener("touchmove", handleTouchMove);
     };
   }, [isOpen]);
 
@@ -263,8 +349,12 @@ export const ProjectModal = ({
     setLightboxOpen(true);
   };
 
+  const handleCloseLightbox = useCallback(() => {
+    setLightboxOpen(false);
+  }, []);
+
   const content = (
-    <div className={styles.modal} onClick={onClose}>
+    <div ref={modalContainerRef} className={styles.modal} onClick={onClose}>
       <button
         className={styles.closeModalBtn}
         onClick={onClose}
@@ -453,7 +543,7 @@ export const ProjectModal = ({
         items={allLightboxImages}
         initialIndex={lightboxIndex}
         isOpen={lightboxOpen}
-        onClose={() => setLightboxOpen(false)}
+        onClose={handleCloseLightbox}
       />
     </>
   );

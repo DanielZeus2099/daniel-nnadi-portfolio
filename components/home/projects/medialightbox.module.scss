@@ -7,10 +7,13 @@
   z-index: 200000000;
   background: rgba(0, 0, 0, 0.92);
   backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  overscroll-behavior: contain;
+  touch-action: none;
 }
 
 .closeBtn {
@@ -29,6 +32,36 @@
   justify-content: center;
   color: #fff;
   font-size: 2.6rem;
+  cursor: pointer;
+  z-index: 100;
+  transition: 0.2s all;
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover,
+  &:active {
+    background: var(--brand);
+    color: var(--background-dark);
+    border-color: var(--brand);
+    transform: scale(1.08);
+  }
+}
+
+.zoomToggleBtn {
+  position: absolute;
+  top: 1.6rem;
+  right: 6.8rem;
+  background: rgba(17, 17, 17, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  width: 4.4rem;
+  height: 4.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 2.2rem;
   cursor: pointer;
   z-index: 100;
   transition: 0.2s all;
@@ -93,6 +126,16 @@
   flex-direction: column;
   align-items: center;
   cursor: auto;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.mediaWrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  touch-action: none;
 }
 
 .mediaContent {
@@ -101,6 +144,10 @@
   object-fit: contain;
   border-radius: 0.8rem;
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
 }
 
 .mediaLabel {
@@ -109,6 +156,7 @@
   font-size: 1.4rem;
   font-weight: 500;
   text-align: center;
+  pointer-events: none;
 }
 
 @media (max-width: 768px) {
@@ -137,5 +185,13 @@
     width: 4.4rem;
     height: 4.4rem;
     font-size: 2.4rem;
+  }
+
+  .zoomToggleBtn {
+    top: 1.2rem;
+    right: 6.2rem;
+    width: 4.4rem;
+    height: 4.4rem;
+    font-size: 2.2rem;
   }
 }
