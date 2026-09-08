@@ -153,16 +153,16 @@ export const ProjectModal = ({
   devMedia,
 }) => {
   useEffect(() => {
+    const body = document.querySelector("body");
+    if (!body) return;
+
     if (isOpen) {
-      document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
+      body.style.overflowY = "hidden";
     } else {
-      document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
+      body.style.overflowY = "auto";
     }
     return () => {
-      document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
+      body.style.overflowY = "auto";
     };
   }, [isOpen]);
 
