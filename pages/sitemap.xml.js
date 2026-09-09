@@ -1,4 +1,4 @@
-const SITE_URL = 'https://nnadidaniel.dev';
+const SITE_URL = 'https://danielnnadi.vercel.app';
 
 function generateSiteMap() {
   return `<?xml version="1.0" encoding="UTF-8"?>

@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://nnadidaniel.dev/sitemap.xml
+Sitemap: https://danielnnadi.vercel.app/sitemap.xml
