@@ -1,5 +1,7 @@
 # Nnadi Daniel - Portfolio Project
 
+> 🌐 **Live Demo / Website**: [https://danielnnadi.vercel.app/](https://danielnnadi.vercel.app/)
+
 Welcome to my portfolio website's README! I'm Nnadi Daniel, a Game Developer from Nigeria. This portfolio showcases my passion for game development, 3D art, and creating interactive entertainment experiences.
 
 ## Overview
@@ -27,8 +29,9 @@ This portfolio website is built using the following technologies:
 
 ## Contact
 
-- Email: [dnnadi2000@gmail.com](mailto:dnnadi2000@gmail.com)
-- LinkedIn: [Nnadi Daniel](https://www.linkedin.com/in/daniel-nnadi-760462215)
+- **Website**: [https://danielnnadi.vercel.app/](https://danielnnadi.vercel.app/)
+- **Email**: [dnnadi2000@gmail.com](mailto:dnnadi2000@gmail.com)
+- **LinkedIn**: [Nnadi Daniel](https://www.linkedin.com/in/daniel-nnadi-760462215)
 
 ## 🙏 Acknowledgments
 
