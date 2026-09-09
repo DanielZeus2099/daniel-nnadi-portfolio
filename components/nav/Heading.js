@@ -7,7 +7,7 @@ export const Heading = () => {
     <header className={styles.heading}>
       <div className={styles.filter_ios}></div>
       <MyLinks />
-      <OutlineButton onClick={() => window.open("/DanielNnadi_Resume.pdf")}>
+      <OutlineButton onClick={() => window.open("/DanielNnadi_EuropassCV.pdf")}>
         My resume
       </OutlineButton>
       <svg xmlns="http://www.w3.org/2000/svg" style={{ display: "none" }}>
