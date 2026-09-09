@@ -22,7 +22,7 @@ export default function home() {
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Nnadi Daniel | Game Developer" />
         <meta property="og:description" content="Nnadi Daniel is a Game Developer at Deluxe Creation Studios, building engaging mobile games across action, simulation, and sports genres using Unity and C#." />
-        <meta property="og:image" content="/og-image.jpg" />
+        <meta property="og:image" content="https://danielnnadi.vercel.app/og-image.jpg?v=2" />
         <meta property="og:site_name" content="Nnadi Daniel | Game Developer" />
         <meta property="og:logo" content="/logo.png" />
 
@@ -30,7 +30,7 @@ export default function home() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Nnadi Daniel | Game Developer" />
         <meta name="twitter:description" content="Nnadi Daniel is a Game Developer at Deluxe Creation Studios, building engaging mobile games across action, simulation, and sports genres using Unity and C#." />
-        <meta name="twitter:image" content="/og-image.jpg" />
+        <meta name="twitter:image" content="https://danielnnadi.vercel.app/og-image.jpg?v=2" />
       </Head>
       <Home />
     </>
