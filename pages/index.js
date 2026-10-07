@@ -33,6 +33,10 @@ export default function home() {
       "C#",
       "Mobile Games",
       "3D Modeling",
+      "3D Animation",
+      "Blender",
+      "Motion Design",
+      "Digital Art",
       "Unity Sentis"
     ]
   };
@@ -40,14 +44,14 @@ export default function home() {
   return (
     <>
       <Head>
-        <title>Nnadi Daniel | Game Developer & Programmer</title>
+        <title>Nnadi Daniel | Game Developer, Programmer & 3D Artist</title>
         <meta
           name="description"
-          content="Nnadi Daniel is a Game Developer and Programmer at Deluxe Creation Studios based in Lagos, Nigeria. Specializing in mobile game systems, Unity, and C#."
+          content="Nnadi Daniel is a Game Developer, Programmer and 3D Artist based in Lagos, Nigeria. Specializing in mobile game systems, Unity, C#, 3D modeling, and animation."
         />
         <meta
           name="keywords"
-          content="Nnadi Daniel, Daniel Nnadi, Game Developer Nigeria, Game Programmer Nigeria, Unity Developer Nigeria, C# Game Programmer, Game Developer Lagos, Deluxe Creation Studios"
+          content="Nnadi Daniel, Daniel Nnadi, Game Developer Nigeria, Game Programmer Nigeria, 3D Artist Nigeria, 3D Animator Nigeria, Unity Developer Nigeria, C# Game Programmer, Blender 3D, Game Developer Lagos, Deluxe Creation Studios"
         />
         <meta name="author" content="Nnadi Daniel" />
         <meta name="robots" content="index, follow" />

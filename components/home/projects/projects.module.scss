@@ -1,3 +1,58 @@
+.tabContainer {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 3.6rem;
+  border-bottom: 1px solid var(--background-light);
+  width: 100%;
+
+  @media (max-width: 500px) {
+    gap: 0.8rem;
+  }
+}
+
+.tabBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 1.2rem 2rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  color: #888;
+  font-size: var(--text-md);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+
+  span {
+    color: transparent;
+    transition: color 0.2s ease-in-out;
+  }
+
+  @media (max-width: 500px) {
+    font-size: 1.8rem;
+    padding: 1rem 1.4rem;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text);
+  }
+
+  &.activeTab {
+    background: rgba(10, 255, 157, 0.05) !important;
+    border-bottom-color: var(--brand) !important;
+    color: var(--text) !important;
+
+    span {
+      color: var(--brand);
+    }
+  }
+}
+
 .projects {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);

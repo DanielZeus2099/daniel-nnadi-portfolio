@@ -1,17 +1,54 @@
+import { useState } from "react";
 import { SectionHeader } from "@/components/utils/SectionHeader";
 import { Project } from "./Project";
+import { ArtShowcase } from "../art/ArtShowcase";
+import { motion, AnimatePresence } from "framer-motion";
 import styles from "./projects.module.scss";
 
 export const Projects = () => {
+  const [activeTab, setActiveTab] = useState("games");
+
   return (
     <section className="section-wrapper" id="projects">
       <SectionHeader title="Projects" dir="r" />
 
-      <div className={styles.projects}>
-        {MyProjects.map((project) => {
-          return <Project key={project.title} {...project} />;
-        })}
+      {/* Main Category Tabs */}
+      <div className={styles.tabContainer}>
+        <button
+          className={`${styles.tabBtn} ${activeTab === "games" ? styles.activeTab : ""}`}
+          onClick={() => setActiveTab("games")}
+        >
+          Games<span>.</span>
+        </button>
+
+        <button
+          className={`${styles.tabBtn} ${activeTab === "art" ? styles.activeTab : ""}`}
+          onClick={() => setActiveTab("art")}
+        >
+          Art & Animation<span>.</span>
+        </button>
       </div>
+
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -15 }}
+          transition={{ duration: 0.25, ease: "easeInOut" }}
+          style={{ width: "100%" }}
+        >
+          {activeTab === "games" ? (
+            <div className={styles.projects}>
+              {MyProjects.map((project) => {
+                return <Project key={project.title} {...project} />;
+              })}
+            </div>
+          ) : (
+            <ArtShowcase />
+          )}
+        </motion.div>
+      </AnimatePresence>
     </section>
   );
 };
