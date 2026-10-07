@@ -10,7 +10,10 @@ export const ArtModal = ({ item, isOpen, onClose }) => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const touchStartX = useRef(null);
+  const touchStartY = useRef(null);
   const touchEndX = useRef(null);
+  const touchEndY = useRef(null);
+  const isSwiping = useRef(false);
   const videoRef = useRef(null);
   const overlayRef = useRef(null);
 
@@ -49,6 +52,7 @@ export const ArtModal = ({ item, isOpen, onClose }) => {
 
   // Expand image into MediaLightbox (matching game image media behavior)
   const handleImageClick = () => {
+    if (isSwiping.current) return;
     if (imageList.length === 0) return;
     const idx = imageList.findIndex((img) => img.src === currentMedia.src);
     setLightboxIndex(idx >= 0 ? idx : 0);
@@ -155,27 +159,44 @@ export const ArtModal = ({ item, isOpen, onClose }) => {
     };
   }, [isOpen, onClose, hasMultipleMedia, handlePrevMedia, handleNextMedia, lightboxOpen]);
 
-  // Touch swipe support for switching between grouped media
+  // Touch swipe support for switching between grouped media (only active when swiping directly on media)
   const handleTouchStart = (e) => {
     if (!hasMultipleMedia) return;
     touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
     touchEndX.current = null;
+    touchEndY.current = null;
+    isSwiping.current = false;
   };
 
   const handleTouchMove = (e) => {
     if (!hasMultipleMedia) return;
     touchEndX.current = e.touches[0].clientX;
+    touchEndY.current = e.touches[0].clientY;
+    if (touchStartX.current !== null && touchEndX.current !== null) {
+      const diffX = Math.abs(touchStartX.current - touchEndX.current);
+      const diffY = Math.abs((touchStartY.current || 0) - (touchEndY.current || 0));
+      if (diffX > 10 && diffX > diffY) {
+        isSwiping.current = true;
+      }
+    }
   };
 
   const handleTouchEnd = () => {
     if (!hasMultipleMedia || touchStartX.current === null || touchEndX.current === null) return;
     const diff = touchStartX.current - touchEndX.current;
-    if (Math.abs(diff) > 50) {
+    const diffY = Math.abs((touchStartY.current || 0) - (touchEndY.current || 0));
+    if (Math.abs(diff) > 40 && Math.abs(diff) > diffY) {
       if (diff > 0) handleNextMedia();
       else handlePrevMedia();
     }
     touchStartX.current = null;
+    touchStartY.current = null;
     touchEndX.current = null;
+    touchEndY.current = null;
+    setTimeout(() => {
+      isSwiping.current = false;
+    }, 100);
   };
 
   if (!isOpen || !item || !currentMedia) return null;
@@ -194,13 +215,10 @@ export const ArtModal = ({ item, isOpen, onClose }) => {
       >
         <motion.div
           className={styles.modal}
-          initial={{ opacity: 0, scale: 0.94, y: 30 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.94, y: 30 }}
-          transition={{ duration: 0.25, ease: "easeOut" }}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 40 }}
+          transition={{ duration: 0.28, ease: "easeOut" }}
         >
           {/* Close button */}
           <button
@@ -215,7 +233,12 @@ export const ArtModal = ({ item, isOpen, onClose }) => {
             {/* Media Column (Left / Top) with Unity Asset Store Style Gallery */}
             <div className={styles.mediaColumn}>
               {/* Main Media Preview Box */}
-              <div className={styles.mainPreviewWrapper}>
+              <div
+                className={styles.mainPreviewWrapper}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+              >
                 {/* Previous Arrow - Only visible if there are multiple media items in this project */}
                 {hasMultipleMedia && (
                   <button
