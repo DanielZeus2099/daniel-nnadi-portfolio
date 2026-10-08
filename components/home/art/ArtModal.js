@@ -356,8 +356,9 @@ export const ArtModal = ({ item, isOpen, onClose }) => {
                       src={currentMedia.src}
                       poster={currentMedia.poster || undefined}
                       controls
-                      controlsList="nodownload"
+                      controlsList="nodownload noplaybackrate"
                       disablePictureInPicture
+                      disableRemotePlayback
                       playsInline
                       autoPlay
                       loop

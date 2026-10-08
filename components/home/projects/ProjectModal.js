@@ -469,8 +469,9 @@ export const ProjectModal = ({
                   <video
                     className={styles.inlineVideo}
                     controls
-                    controlsList="nodownload"
+                    controlsList="nodownload noplaybackrate"
                     disablePictureInPicture
+                    disableRemotePlayback
                     playsInline
                     preload="metadata"
                     onContextMenu={(e) => e.preventDefault()}

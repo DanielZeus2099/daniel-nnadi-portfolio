@@ -375,8 +375,9 @@ export const MediaLightbox = ({ items, initialIndex = 0, isOpen, onClose }) => {
                 <video
                   className={styles.mediaContent}
                   controls
-                  controlsList="nodownload"
+                  controlsList="nodownload noplaybackrate"
                   disablePictureInPicture
+                  disableRemotePlayback
                   autoPlay
                   playsInline
                   onContextMenu={(e) => e.preventDefault()}
