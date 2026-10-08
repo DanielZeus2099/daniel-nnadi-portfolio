@@ -6,6 +6,7 @@ import { Reveal } from "@/components/utils/Reveal";
 import { useAnimation, useInView, motion } from "framer-motion";
 import { AiFillCrown, AiFillTag } from "react-icons/ai";
 import { MdCollections } from "react-icons/md";
+import { updateSearchParam, removeSearchParam, createProjectSlug } from "@/components/utils/urlParams";
 
 const INITIAL_COUNT = 8;
 
@@ -154,12 +155,44 @@ export const ArtShowcase = () => {
   const justCollapsed = useRef(false);
 
   const handleOpenModal = (item) => {
+    updateSearchParam("art", item.id);
     setActiveItem(item);
   };
 
   const handleCloseModal = () => {
+    removeSearchParam("art");
     setActiveItem(null);
   };
+
+  // Sync modal state with URL params and handle phone Back / browser navigation
+  useEffect(() => {
+    const syncArtFromUrl = () => {
+      if (typeof window === "undefined") return;
+      if (window.__suppressModalClose) return;
+
+      const url = new URL(window.location.href);
+      const artParam = url.searchParams.get("art");
+      if (artParam) {
+        const matchIndex = artItems.findIndex(
+          (i) => i.id === artParam || createProjectSlug(i.title) === artParam
+        );
+        if (matchIndex !== -1) {
+          if (matchIndex >= INITIAL_COUNT) {
+            setShowAll(true);
+          }
+          setActiveItem(artItems[matchIndex]);
+          return;
+        }
+      }
+      setActiveItem(null);
+    };
+
+    syncArtFromUrl();
+    window.addEventListener("popstate", syncArtFromUrl);
+    return () => {
+      window.removeEventListener("popstate", syncArtFromUrl);
+    };
+  }, []);
 
   // After collapsing, snap the viewport back to the last initially visible
   // card and restore keyboard focus on the toggle (runs after the DOM commit,

@@ -10,7 +10,11 @@ export function updateSearchParam(key, value) {
 }
 
 export function removeSearchParam(key) {
+  if (typeof window === "undefined") return;
   const url = new URL(window.location.href);
+  if (!url.searchParams.has(key)) {
+    return;
+  }
   url.searchParams.delete(key);
 
   window.history.pushState({}, "", url.toString());

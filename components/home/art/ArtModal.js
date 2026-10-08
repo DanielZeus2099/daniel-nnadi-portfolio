@@ -9,6 +9,10 @@ export const ArtModal = ({ item, isOpen, onClose }) => {
   const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const lightboxOpenRef = useRef(lightboxOpen);
+  useEffect(() => {
+    lightboxOpenRef.current = lightboxOpen;
+  }, [lightboxOpen]);
   const touchStartX = useRef(null);
   const touchStartY = useRef(null);
   const touchEndX = useRef(null);
@@ -121,6 +125,35 @@ export const ArtModal = ({ item, isOpen, onClose }) => {
     setLightboxIndex(idx >= 0 ? idx : 0);
     setLightboxOpen(true);
   };
+
+  const handleCloseLightbox = useCallback(() => {
+    setLightboxOpen(false);
+  }, []);
+
+  // Handle mobile/browser Back button to close modal
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handlePopState = () => {
+      if (typeof window !== "undefined" && window.__suppressModalClose) {
+        return;
+      }
+      if (lightboxOpenRef.current) {
+        return;
+      }
+      if (typeof window !== "undefined") {
+        const url = new URL(window.location.href);
+        if (!url.searchParams.has("art")) {
+          onClose();
+        }
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [isOpen, onClose]);
 
   // Lock page scroll and prevent scroll chaining (matches game ProjectModal behavior)
   useEffect(() => {
@@ -467,7 +500,7 @@ export const ArtModal = ({ item, isOpen, onClose }) => {
           items={imageList}
           initialIndex={lightboxIndex}
           isOpen={lightboxOpen}
-          onClose={() => setLightboxOpen(false)}
+          onClose={handleCloseLightbox}
         />
       )}
     </AnimatePresence>
