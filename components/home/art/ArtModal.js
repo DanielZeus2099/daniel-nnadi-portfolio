@@ -213,22 +213,23 @@ export const ArtModal = ({ item, isOpen, onClose }) => {
           if (e.target === e.currentTarget) onClose();
         }}
       >
+        {/* Close button - fixed to viewport so it never scrolls with page */}
+        <button
+          className={styles.closeButton}
+          onClick={onClose}
+          aria-label="Close modal"
+        >
+          <MdClose />
+        </button>
+
         <motion.div
           className={styles.modal}
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 40 }}
           transition={{ duration: 0.28, ease: "easeOut" }}
+          onClick={(e) => e.stopPropagation()}
         >
-          {/* Close button */}
-          <button
-            className={styles.closeButton}
-            onClick={onClose}
-            aria-label="Close modal"
-          >
-            <MdClose />
-          </button>
-
           <div className={styles.modalBody}>
             {/* Media Column (Left / Top) with Unity Asset Store Style Gallery */}
             <div className={styles.mediaColumn}>

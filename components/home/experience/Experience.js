@@ -71,10 +71,11 @@ const experience = [
     time: "Dec. 2021 - Present",
     location: "Lagos, Nigeria",
     description:
-      "I joined the studio as an intern during my 6-month college industrial training program, where I was mentored and learned the core foundations of game development. After the internship, I was hired full-time as a Game Programmer. My main responsibilities include developing, testing, and optimizing game mechanics, UI systems, and AI behaviors. I build quick prototypes from concept briefs, blocking out scenes with simple placeholders to get the core game loop running as fast as possible. I'm also responsible for integrating APIs, packages, and assets into our games, as well as debugging, troubleshooting, and resolving technical issues across projects. I maintain clean, efficient, and scalable code, and I collaborate closely with designers, artists, and other programmers. Since joining, I've contributed to shipping multiple titles to Steam, the Google Play Store, and the iOS App Store, including Rasta Santa, Grow Farm Garden, Captain EcoGen, Finger Gunner, Dribble Run, and many others.",
+      "I joined the studio as an intern during my college industrial training program, where I was mentored and learned the core foundations of game development. After the internship, I was hired full-time as a Game Programmer. My main responsibilities include developing, testing, and optimizing game mechanics, UI systems, and AI behaviors. I also handle integrating APIs, packages, and assets into our games, while debugging and resolving technical issues across projects. I maintain clean, scalable code and collaborate closely with designers, artists, and other programmers. Since joining, I've contributed to shipping multiple titles to Steam, the Google Play Store, and the iOS App Store, including Rasta Santa, Grow Farm Garden, Captain EcoGen, Finger Gunner, Dribble Run, and many others.",
     tech: [
       "Unity",
       "C#",
+      "Prototyping",
       "Blender",
       "Android",
       "Google Play Console",

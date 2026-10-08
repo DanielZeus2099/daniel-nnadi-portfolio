@@ -28,6 +28,7 @@ export const Stats = () => {
             <span className="chip">Visual Scripting</span>
             <span className="chip">Game Design</span>
             <span className="chip">Game Programming</span>
+            <span className="chip">Prototyping</span>
             <span className="chip">Game UI/UX</span>
             <span className="chip">AI Behavior</span>
             <span className="chip">Blender</span>
