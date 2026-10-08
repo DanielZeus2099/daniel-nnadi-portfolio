@@ -267,19 +267,26 @@ export const ProjectModal = ({
     lightboxOpenRef.current = lightboxOpen;
   }, [lightboxOpen]);
 
-  const pauseAllVideos = () => {
+  const pauseAllVideos = useCallback((excludeEl = null) => {
     if (typeof document === "undefined") return;
+    if (document.pictureInPictureElement && document.pictureInPictureElement !== excludeEl) {
+      try {
+        document.exitPictureInPicture().catch(() => {});
+      } catch (e) {}
+    }
     const videoElements = document.querySelectorAll("video");
     videoElements.forEach((vid) => {
-      try {
-        if (!vid.paused) {
-          vid.pause();
+      if (vid !== excludeEl) {
+        try {
+          if (!vid.paused) {
+            vid.pause();
+          }
+        } catch (e) {
+          // ignore
         }
-      } catch (e) {
-        // ignore
       }
     });
-  };
+  }, []);
 
   // Pause videos when Lightbox opens
   useEffect(() => {
@@ -462,8 +469,12 @@ export const ProjectModal = ({
                   <video
                     className={styles.inlineVideo}
                     controls
+                    controlsList="nodownload"
+                    disablePictureInPicture
                     playsInline
                     preload="metadata"
+                    onContextMenu={(e) => e.preventDefault()}
+                    onPlay={(e) => pauseAllVideos(e.target)}
                   >
                     <source src={video.src} type="video/mp4" />
                     Your browser does not support the video tag.

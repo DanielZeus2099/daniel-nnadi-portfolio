@@ -50,6 +50,33 @@ export const MediaLightbox = ({ items, initialIndex = 0, isOpen, onClose }) => {
     }
   }, [isZoomed]);
 
+  // Pause all videos and exit Picture-in-Picture
+  const pauseAllVideos = useCallback((excludeEl = null) => {
+    if (typeof document === "undefined") return;
+    if (document.pictureInPictureElement && document.pictureInPictureElement !== excludeEl) {
+      try {
+        document.exitPictureInPicture().catch(() => {});
+      } catch (e) {}
+    }
+    const videoElements = document.querySelectorAll("video");
+    videoElements.forEach((vid) => {
+      if (vid !== excludeEl) {
+        try {
+          if (!vid.paused) vid.pause();
+        } catch (e) {}
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) {
+      pauseAllVideos();
+    }
+    return () => {
+      pauseAllVideos();
+    };
+  }, [isOpen, pauseAllVideos]);
+
   // Keep stable reference to onClose to prevent popstate effect re-running
   const onCloseRef = useRef(onClose);
   useEffect(() => {
@@ -66,10 +93,11 @@ export const MediaLightbox = ({ items, initialIndex = 0, isOpen, onClose }) => {
     }
   }, [isOpen, initialIndex]);
 
-  // Reset zoom when navigating between slides
+  // Reset zoom and pause videos when navigating between slides
   useEffect(() => {
     setIsZoomed(false);
-  }, [currentIndex]);
+    pauseAllVideos();
+  }, [currentIndex, pauseAllVideos]);
 
   // Handle phone hardware/browser Back button to close lightbox
   useEffect(() => {
@@ -347,8 +375,12 @@ export const MediaLightbox = ({ items, initialIndex = 0, isOpen, onClose }) => {
                 <video
                   className={styles.mediaContent}
                   controls
+                  controlsList="nodownload"
+                  disablePictureInPicture
                   autoPlay
                   playsInline
+                  onContextMenu={(e) => e.preventDefault()}
+                  onPlay={(e) => pauseAllVideos(e.target)}
                 >
                   <source src={current.src} type="video/mp4" />
                   Your browser does not support the video tag.

@@ -17,6 +17,24 @@ export const ArtModal = ({ item, isOpen, onClose }) => {
   const videoRef = useRef(null);
   const overlayRef = useRef(null);
 
+  // Pause all videos and exit Picture-in-Picture
+  const pauseAllVideos = useCallback((excludeEl = null) => {
+    if (typeof document === "undefined") return;
+    if (document.pictureInPictureElement && document.pictureInPictureElement !== excludeEl) {
+      try {
+        document.exitPictureInPicture().catch(() => {});
+      } catch (e) {}
+    }
+    const videoElements = document.querySelectorAll("video");
+    videoElements.forEach((vid) => {
+      if (vid !== excludeEl) {
+        try {
+          if (!vid.paused) vid.pause();
+        } catch (e) {}
+      }
+    });
+  }, []);
+
   // Active media list for this specific project
   const mediaList =
     item?.mediaList && item.mediaList.length > 0
@@ -37,7 +55,51 @@ export const ArtModal = ({ item, isOpen, onClose }) => {
     setSelectedMediaIndex(0);
     setLightboxOpen(false);
     setLightboxIndex(0);
-  }, [item]);
+    pauseAllVideos();
+  }, [item, pauseAllVideos]);
+
+  // Pause videos when modal is closed or unmounted
+  useEffect(() => {
+    if (!isOpen) {
+      pauseAllVideos();
+    }
+    return () => {
+      pauseAllVideos();
+    };
+  }, [isOpen, pauseAllVideos]);
+
+  // Pause videos when switching media
+  useEffect(() => {
+    pauseAllVideos();
+  }, [selectedMediaIndex, pauseAllVideos]);
+
+  // Pause videos when Lightbox opens
+  useEffect(() => {
+    if (lightboxOpen) {
+      pauseAllVideos();
+    }
+  }, [lightboxOpen, pauseAllVideos]);
+
+  // Pause videos when browser tab is switched or window minimized
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) pauseAllVideos();
+    };
+
+    const handleBlur = () => {
+      pauseAllVideos();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("blur", handleBlur);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("blur", handleBlur);
+    };
+  }, [isOpen, pauseAllVideos]);
 
   // Navigate ONLY between media linked to the current project
   const handlePrevMedia = useCallback(() => {
@@ -54,6 +116,7 @@ export const ArtModal = ({ item, isOpen, onClose }) => {
   const handleImageClick = () => {
     if (isSwiping.current) return;
     if (imageList.length === 0) return;
+    pauseAllVideos();
     const idx = imageList.findIndex((img) => img.src === currentMedia.src);
     setLightboxIndex(idx >= 0 ? idx : 0);
     setLightboxOpen(true);
@@ -260,9 +323,14 @@ export const ArtModal = ({ item, isOpen, onClose }) => {
                       src={currentMedia.src}
                       poster={currentMedia.poster || undefined}
                       controls
+                      controlsList="nodownload"
+                      disablePictureInPicture
                       playsInline
                       autoPlay
+                      loop
                       preload="auto"
+                      onContextMenu={(e) => e.preventDefault()}
+                      onPlay={(e) => pauseAllVideos(e.target)}
                     />
                   </div>
                 ) : (
