@@ -25,7 +25,7 @@ export const artItems = [
     description:
       "A personal conceptual project submitted for the Lagos Meet 3D billboard challenge. It depicts Nigeria in an incubation capsule, telling the story of a nation that, despite decaying infrastructure and rusty facilities, remains rich in resources and overflowing with vibrant life.",
     longDescription:
-      "A personal conceptual project born from an original idea to tell the story of Nigeria and the vast resources she possesses, which I submitted for the Lagos Meet 3D billboard challenge. The piece visually portrays Nigeria in critical condition, preserved within an incubation capsule to save her. Even though the surrounding environment is a rusty, aging facility with worn infrastructure, lush vegetation bursts forth from the capsule, symbolizing the enduring life, rich heritage, and undeniable beauty that continues to thrive within the Motherland. This showcase features a cinematic film, an environment walkthrough, and a high-resolution production still.",
+      "A personal conceptual project born from an original idea to tell the story of Nigeria and the vast resources she possesses, which I submitted for the Lagos Meet 3D billboard challenge. The piece visually portrays Nigeria in critical condition, preserved within an incubation capsule to save her. Even though the surrounding environment is a rusty, aging facility with worn infrastructure, lush vegetation bursts forth from the capsule, symbolizing the enduring life, rich heritage, and undeniable beauty that continues to thrive within the Motherland. This showcase features a cinematic film, an environment walkthrough, a high-resolution production still, and a clay render.",
     mediaList: [
       {
         type: "video",
@@ -43,6 +43,11 @@ export const artItems = [
         type: "image",
         src: "/art-and-animation-project/Artworks/saving_nigeria.jpg",
         label: "Production Still",
+      },
+      {
+        type: "image",
+        src: "/art-and-animation-project/Artworks/FB_IMG_1793051260992.jpg",
+        label: "Clay Render",
       },
     ],
   },
