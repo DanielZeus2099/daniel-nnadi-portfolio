@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SectionHeader } from "@/components/utils/SectionHeader";
 import { Project } from "./Project";
 import { ArtShowcase } from "../art/ArtShowcase";
@@ -7,6 +7,26 @@ import styles from "./projects.module.scss";
 
 export const Projects = () => {
   const [activeTab, setActiveTab] = useState("games");
+
+  useEffect(() => {
+    const syncTabFromUrl = () => {
+      if (typeof window === "undefined") return;
+      const url = new URL(window.location.href);
+      if (url.searchParams.has("art")) {
+        setActiveTab("art");
+        document.getElementById("projects")?.scrollIntoView({ behavior: "auto", block: "start" });
+      } else if (url.searchParams.has("project")) {
+        setActiveTab("games");
+        document.getElementById("projects")?.scrollIntoView({ behavior: "auto", block: "start" });
+      }
+    };
+
+    syncTabFromUrl();
+    window.addEventListener("popstate", syncTabFromUrl);
+    return () => {
+      window.removeEventListener("popstate", syncTabFromUrl);
+    };
+  }, []);
 
   return (
     <section className="section-wrapper" id="projects">

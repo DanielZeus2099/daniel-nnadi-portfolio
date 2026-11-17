@@ -160,8 +160,17 @@ export const ArtShowcase = () => {
   };
 
   const handleCloseModal = () => {
+    const closedItem = activeItem;
     removeSearchParam("art");
     setActiveItem(null);
+    if (closedItem) {
+      setTimeout(() => {
+        const el = document.getElementById(`art-${closedItem.id}`);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }, 50);
+    }
   };
 
   // Sync modal state with URL params and handle phone Back / browser navigation
@@ -177,10 +186,18 @@ export const ArtShowcase = () => {
           (i) => i.id === artParam || createProjectSlug(i.title) === artParam
         );
         if (matchIndex !== -1) {
+          const matchedItem = artItems[matchIndex];
           if (matchIndex >= INITIAL_COUNT) {
             setShowAll(true);
           }
-          setActiveItem(artItems[matchIndex]);
+          setActiveItem(matchedItem);
+
+          setTimeout(() => {
+            const el = document.getElementById(`art-${matchedItem.id}`);
+            if (el) {
+              el.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+          }, matchIndex >= INITIAL_COUNT ? 150 : 50);
           return;
         }
       }
@@ -202,7 +219,10 @@ export const ArtShowcase = () => {
     justCollapsed.current = false;
 
     const frame = requestAnimationFrame(() => {
-      const lastProject = document.getElementById("last-initial-art-project");
+      const lastProjectId = `art-${artItems[INITIAL_COUNT - 1]?.id}`;
+      const lastProject =
+        document.getElementById(lastProjectId) ||
+        document.getElementById("last-initial-art-project");
       if (lastProject) {
         lastProject.scrollIntoView({ behavior: "smooth", block: "center" });
       }
@@ -234,7 +254,7 @@ export const ArtShowcase = () => {
         {visibleItems.map((item, index) => (
           <ArtCard
             key={item.id}
-            id={index === INITIAL_COUNT - 1 ? "last-initial-art-project" : undefined}
+            id={`art-${item.id}`}
             item={item}
             onOpen={handleOpenModal}
           />

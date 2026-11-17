@@ -37,6 +37,12 @@ export const Project = ({
   useEffect(() => {
     if (currentProject === projectSlug) {
       setIsOpen(true);
+      setTimeout(() => {
+        const el = document.getElementById(`project-${projectSlug}`);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }, 100);
     }
   }, [currentProject, projectSlug]);
 
@@ -56,6 +62,12 @@ export const Project = ({
   const closeModal = () => {
     removeSearchParam("project");
     setIsOpen(false);
+    setTimeout(() => {
+      const el = document.getElementById(`project-${projectSlug}`);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }, 50);
   };
 
   const openModal = () => {
@@ -66,6 +78,7 @@ export const Project = ({
   return (
     <>
       <motion.div
+        id={`project-${projectSlug}`}
         ref={ref}
         variants={{
           hidden: { opacity: 0, y: 100 },
